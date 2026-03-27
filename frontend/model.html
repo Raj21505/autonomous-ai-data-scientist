@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Training & Prediction</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a class="brand" href="index.html">
+                <i data-lucide="sparkles"></i>
+                AI Data Scientist
+            </a>
+            <div class="nav-links">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="cleaning.html">Overview</a>
+                <a class="nav-link" href="target.html">Cleaning</a>
+                <a class="nav-link" href="eda.html">EDA</a>
+                <a class="nav-link active" href="model.html">Model</a>
+                <a class="nav-link" href="dashboard.html">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page container">
+        <section class="hero">
+            <h1>ML Model Training & Prediction</h1>
+            <p class="hero-subtitle">Train the best candidate models, compare results, and run single or batch predictions with a clean workflow.</p>
+        </section>
+
+        <section class="section-spaced">
+            <div class="action-row" style="margin-top: 0;">
+                <button class="back-button" onclick="goBack()">Back to Cleaning Report</button>
+            </div>
+        </section>
+
+        <section class="card section-spaced">
+            <div class="tabs">
+                <button id="tabTraining" class="tab-button active" onclick="switchTab('training')">Train Models</button>
+                <button id="tabResults" class="tab-button" onclick="switchTab('results')" style="display:none;">Model Results</button>
+                <button id="tabDashboard" class="tab-button" onclick="switchTab('dashboard')" style="display:none;">Interactive Dashboard</button>
+                <button id="tabPrediction" class="tab-button" onclick="switchTab('prediction')" style="display:none;">Make Prediction</button>
+            </div>
+        </section>
+
+        <section id="training" class="tab-content active section-spaced">
+            <div class="card">
+                <h3>Step 1: Select Target Column</h3>
+                <p>
+                    This is the column you want to predict. The system automatically chooses
+                    classification or regression based on your selected target.
+                </p>
+                <div class="form-group">
+                    <label for="targetSelectML">Target Column</label>
+                    <select id="targetSelectML">
+                        <option value="">Select target column</option>
+                    </select>
+                </div>
+                <button id="trainModelsBtn" onclick="trainModels()">Train All Models</button>
+                <div id="targetHint" class="card section-spaced" style="display:none;">
+                    <strong>Selected target info:</strong>
+                    <span id="targetInfo"></span>
+                </div>
+            </div>
+
+            <div id="trainingStatus" class="card section-spaced" style="display:none;">
+                <div class="loader">
+                    <div class="spinner"></div>
+                    <span>Training models. This may take a minute.</span>
+                </div>
+            </div>
+
+            <div id="trainingResults" class="card section-spaced" style="display:none;">
+                <h3>Training Complete</h3>
+                <div id="trainingDetails"></div>
+            </div>
+        </section>
+
+        <section id="results" class="tab-content section-spaced">
+            <div id="modelResultsContent" class="card">
+                <p class="text-muted">Train models first to see results.</p>
+            </div>
+        </section>
+
+        <section id="dashboard" class="tab-content section-spaced">
+            <div class="card">
+                <div class="topbar">
+                    <h3>Dynamic Interactive Dashboard</h3>
+                    <div class="btns">
+                        <button type="button" onclick="loadInteractiveDashboardSchema(true)">Refresh Dashboard</button>
+                        <button type="button" class="btn-secondary" onclick="openFullDashboardPage()">Open Full Dashboard</button>
+                        <button type="button" class="btn-secondary" onclick="downloadDashboardImage()">Download Dashboard Image</button>
+                    </div>
+                </div>
+                <div id="interactiveDashboardStatus" class="status">Train models first to generate dashboard schema.</div>
+                <div id="interactiveDashboardContainer" class="interactive-dashboard-wrap" style="display:none;">
+                    <aside class="dashboard-side-rail">
+                        <div>
+                            <div class="dashboard-brand">Insights</div>
+                            <div class="text-muted">Smart Analytics</div>
+                        </div>
+                        <div class="dashboard-nav">
+                            <div class="dashboard-nav-item active">Dashboard</div>
+                            <div class="dashboard-nav-item">Model Performance</div>
+                            <div class="dashboard-nav-item">Feature Stats</div>
+                            <div class="dashboard-nav-item">Data Quality</div>
+                        </div>
+                    </aside>
+                    <section class="dashboard-main-zone">
+                        <div class="dashboard-headline">Overview</div>
+                        <div id="dashboardKpiGrid" class="dashboard-kpi-grid"></div>
+                        <div id="dashboardChartsRow2" class="dashboard-chart-row2"></div>
+                        <div id="dashboardChartsRow3" class="dashboard-chart-row3"></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <section id="prediction" class="tab-content section-spaced">
+            <div id="predictionContent" class="card">
+                <p class="text-muted">Train models first to make predictions.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="js/model.js"></script>
+    <script>
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

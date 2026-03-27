@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDA Showcase</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a class="brand" href="index.html">
+                <i data-lucide="sparkles"></i>
+                AI Data Scientist
+            </a>
+            <div class="nav-links">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="cleaning.html">Overview</a>
+                <a class="nav-link" href="target.html">Cleaning</a>
+                <a class="nav-link active" href="eda.html">EDA</a>
+                <a class="nav-link" href="model.html">Model</a>
+                <a class="nav-link" href="dashboard.html">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page container eda-container">
+        <section class="hero">
+            <h1>EDA Graph Showcase</h1>
+            <p class="hero-subtitle">Open each section only when needed for a focused, uncluttered exploration flow.</p>
+        </section>
+
+        <div class="top-actions action-row">
+            <button class="btn-secondary" onclick="goBack()">Back to Cleaning Report</button>
+        </div>
+
+        <div id="loading" class="card loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Generating EDA graphs...</p>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+        <section id="distributionSection" class="section-shell">
+            <div class="section-head">
+                <h2 class="section-title">Distribution Graphs</h2>
+                <button class="btn section-toggle" onclick="toggleSection('distribution')">View Graphs</button>
+            </div>
+            <div class="section-body" id="distributionBody">
+                <div class="action-row">
+                    <button class="btn" onclick="downloadSection('distribution')">Download Distribution Section</button>
+                </div>
+                <div id="distributionGallery" class="graph-grid"></div>
+            </div>
+        </section>
+
+        <section id="comparisonSection" class="section-shell">
+            <div class="section-head">
+                <h2 class="section-title">Comparison Graphs</h2>
+                <button class="btn section-toggle" onclick="toggleSection('comparison')">View Graphs</button>
+            </div>
+            <div class="section-body" id="comparisonBody">
+                <div class="action-row">
+                    <button class="btn" onclick="downloadSection('comparison')">Download Comparison Section</button>
+                </div>
+                <div id="comparisonGallery" class="graph-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="js/eda.js"></script>
+    <script>
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

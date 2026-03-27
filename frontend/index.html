@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Dataset</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a class="brand" href="index.html">
+                <i data-lucide="sparkles"></i>
+                AI Data Scientist
+            </a>
+            <div class="nav-links">
+                <a class="nav-link active" href="index.html">Home</a>
+                <a class="nav-link" href="cleaning.html">Overview</a>
+                <a class="nav-link" href="target.html">Cleaning</a>
+                <a class="nav-link" href="eda.html">EDA</a>
+                <a class="nav-link" href="model.html">Model</a>
+                <a class="nav-link" href="dashboard.html">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page container">
+        <section class="hero">
+            <h1>Autonomous AI Data Analysis</h1>
+            <p class="hero-subtitle">Upload your dataset and let the pipeline guide you from quality checks to modeling and dashboard insights.</p>
+        </section>
+
+        <section class="card section-spaced">
+            <label for="fileInput">Dataset File</label>
+            <div class="file-upload">
+                <input type="file" id="fileInput" class="file-upload-input" accept=".csv,.xls,.xlsx">
+                <div class="file-upload-shell">
+                    <label for="fileInput" class="file-upload-trigger">Browse Files</label>
+                    <div id="fileInputName" class="file-upload-name">No dataset selected</div>
+                </div>
+                <p class="file-upload-hint">Accepted formats: CSV, XLS, XLSX. You can also drag and drop a file into the upload area.</p>
+            </div>
+            <div class="action-row">
+                <button id="uploadBtn">Upload Dataset</button>
+            </div>
+        </section>
+
+        <section id="analysis" class="section-spaced"></section>
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/app.js"></script>
+    <script>
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

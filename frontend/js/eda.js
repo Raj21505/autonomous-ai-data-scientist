@@ -24,6 +24,36 @@ let renderedSections = {
     comparison: false
 };
 
+function ensureGlobalLoader() {
+    let overlay = document.getElementById('globalLoaderOverlay');
+    if (overlay) return overlay;
+
+    overlay = document.createElement('div');
+    overlay.id = 'globalLoaderOverlay';
+    overlay.className = 'global-loader-overlay';
+    overlay.innerHTML = [
+        '<div class="global-loader-card" role="status" aria-live="polite" aria-busy="true">',
+        '<div class="global-loader-spinner" aria-hidden="true"></div>',
+        '<div class="global-loader-title" id="globalLoaderMessage">Processing request</div>',
+        '<div class="global-loader-subtitle">Please wait while we prepare your results</div>',
+        '<div class="global-loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>',
+        '</div>'
+    ].join('');
+
+    document.body.appendChild(overlay);
+    return overlay;
+}
+
+function setGlobalLoader(active, message) {
+    const overlay = ensureGlobalLoader();
+    const messageNode = document.getElementById('globalLoaderMessage');
+    if (messageNode && message) {
+        messageNode.textContent = message;
+    }
+    overlay.classList.toggle('active', Boolean(active));
+    document.body.style.overflow = active ? 'hidden' : '';
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     datasetId = urlParams.get('id') || sessionStorage.getItem('dataset_id') || sessionStorage.getItem('datasetId');
@@ -126,10 +156,9 @@ function renderGraphGallery(graphs, galleryId, emptyMessage) {
 }
 
 async function generateGraphGallery() {
-    const loadingDiv = document.getElementById('loading');
     const errorDiv = document.getElementById('errorMessage');
 
-    loadingDiv.style.display = 'block';
+    setGlobalLoader(true, 'Generating EDA graphs and insights...');
     errorDiv.style.display = 'none';
 
     try {
@@ -162,7 +191,7 @@ async function generateGraphGallery() {
     } catch (error) {
         showError(`Failed to generate EDA graphs: ${error.message}`);
     } finally {
-        loadingDiv.style.display = 'none';
+        setGlobalLoader(false);
     }
 }
 

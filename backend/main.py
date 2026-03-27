@@ -1,11 +1,13 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
+from fastapi.staticfiles import StaticFiles
 from uuid import uuid4
 import pandas as pd
 import numpy as np
 import json
 import base64
+from pathlib import Path
 
 from backend.state import datasets, trained_models
 from backend.utils.file_loader import load_csv
@@ -30,6 +32,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+FRONTEND_DIR = BASE_DIR / "frontend"
 
 
 def _to_json_serializable(obj):
@@ -822,3 +828,8 @@ async def predict_batch(id: str = Form(...), file: UploadFile = File(...)):
         raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Batch prediction failed: {str(e)[:200]}")
+
+
+if FRONTEND_DIR.exists():
+    # Serve static frontend pages and assets from the same origin as the API.
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")

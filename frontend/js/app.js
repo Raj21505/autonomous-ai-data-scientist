@@ -1,3 +1,19 @@
+const API_BASE = (() => {
+    const host = window.location.hostname;
+    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+    if (window.API_BASE_URL) {
+        return window.API_BASE_URL;
+    }
+
+    // When running frontend on a separate local static server, keep API on 8000.
+    if (isLocalHost && window.location.port && window.location.port !== '8000') {
+        return 'http://localhost:8000';
+    }
+
+    return '';
+})();
+
 function initFileUploadBox(inputId, filenameId, emptyText) {
     const input = document.getElementById(inputId);
     const nameNode = document.getElementById(filenameId);
@@ -80,7 +96,7 @@ async function uploadDataset() {
     setGlobalLoader(true, 'Uploading and analyzing your dataset...');
 
     try {
-        const res = await fetch('http://localhost:8000/upload', {
+        const res = await fetch(`${API_BASE}/upload`, {
             method: 'POST',
             body: form
         });
@@ -382,7 +398,7 @@ async function runCleaning() {
     setGlobalLoader(true, 'Cleaning data and preparing report...');
 
     try {
-        const res = await fetch('http://localhost:8000/clean', {
+        const res = await fetch(`${API_BASE}/clean`, {
             method: 'POST',
             body: form
         });
@@ -452,7 +468,7 @@ function renderCleaningReport(data) {
 
 function downloadData() {
     const id = sessionStorage.getItem('dataset_id');
-    const url = `http://localhost:8000/data/${id}?full=1`;
+    const url = `${API_BASE}/data/${id}?full=1`;
     fetch(url)
         .then(r => r.blob())
         .then(blob => {

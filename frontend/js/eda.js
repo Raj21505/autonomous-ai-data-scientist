@@ -1,5 +1,20 @@
 let datasetId = null;
 let targetColumn = null;
+const API_BASE = (() => {
+    const host = window.location.hostname;
+    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+    if (window.API_BASE_URL) {
+        return window.API_BASE_URL;
+    }
+
+    if (isLocalHost && window.location.port && window.location.port !== '8000') {
+        return 'http://localhost:8000';
+    }
+
+    return '';
+})();
+
 let sectionGraphs = {
     distribution: [],
     comparison: []
@@ -23,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function getImageUrl(category, imageName) {
-    return `http://localhost:8000/eda-image/${datasetId}/${category}/${imageName}`;
+    return `${API_BASE}/eda-image/${datasetId}/${category}/${imageName}`;
 }
 
 function getGraphSources(summary) {
@@ -121,7 +136,7 @@ async function generateGraphGallery() {
         const formData = new URLSearchParams();
         formData.append('target', targetColumn || '');
 
-        const response = await fetch(`http://localhost:8000/eda/${datasetId}`, {
+        const response = await fetch(`${API_BASE}/eda/${datasetId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData

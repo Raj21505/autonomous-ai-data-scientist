@@ -117,8 +117,46 @@ Frontend URL:
 - http://127.0.0.1:5500/index.html
 
 Important:
-- Keep backend running on port 8000 (frontend JS calls `http://localhost:8000`)
-- Keep frontend running on port 5500 (or any static host)
+- Keep backend running on port 8000
+- If frontend runs on a separate local static server (for example port 5500), frontend JS auto-calls `http://localhost:8000`
+- If frontend is served by FastAPI (same origin), frontend JS auto-calls relative API routes
+
+## Deploy On Render (Frontend + Backend Linked)
+
+This repository is now configured so FastAPI serves both:
+- API endpoints (for example `/upload`, `/clean`, `/train-models`)
+- Frontend pages/assets from `frontend/` on the same Render URL
+
+### 1) Push your latest code
+
+Make sure these files are in your repo:
+- `render.yaml`
+- `backend/main.py` (now mounts `frontend/` as static files)
+- Updated frontend JS files in `frontend/js/`
+
+### 2) Create service from Blueprint
+
+In Render:
+1. Open Dashboard -> New -> Blueprint
+2. Select your GitHub repo
+3. Render reads `render.yaml` and creates the web service
+
+`render.yaml` uses:
+- Build: `pip install -r requirements.txt`
+- Start: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+
+### 3) Open the deployed app
+
+After deploy:
+- App URL shows the frontend home page
+- API docs are available at `/docs`
+
+Because frontend and backend share one Render origin, there is no cross-origin URL mismatch in production.
+
+### 4) Optional environment override
+
+Frontend also supports an optional runtime global variable `window.API_BASE_URL`.
+If you later split frontend/backend into separate services, you can inject that value to point frontend to a different backend URL.
 
 ## How to Use the App
 
@@ -256,8 +294,9 @@ Try:
 ## Development Notes
 
 - Backend entrypoint: `backend/main.py`
-- Frontend API base URL is hardcoded to `http://localhost:8000` in JS files
-- If backend host/port changes, update frontend JS API base constants
+- Frontend API base URL is environment-aware:
+  - same-origin in production (Render)
+  - `http://localhost:8000` fallback for separate local static frontend servers
 
 ## Suggested Next Improvements
 

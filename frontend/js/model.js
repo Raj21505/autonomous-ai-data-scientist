@@ -1,6 +1,19 @@
 // Get dataset ID from session storage
 const datasetId = sessionStorage.getItem('dataset_id');
-const API_BASE = 'http://localhost:8000';
+const API_BASE = (() => {
+    const host = window.location.hostname;
+    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+
+    if (window.API_BASE_URL) {
+        return window.API_BASE_URL;
+    }
+
+    if (isLocalHost && window.location.port && window.location.port !== '8000') {
+        return 'http://localhost:8000';
+    }
+
+    return '';
+})();
 
 function ensureGlobalLoader() {
     let overlay = document.getElementById('globalLoaderOverlay');

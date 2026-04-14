@@ -23,6 +23,7 @@ from backend.agents.data_cleaning import clean_dataset
 from backend.agents.feature_selection import target_correlation, remove_low_importance
 from backend.agents.model_training import ModelTrainer, train_and_evaluate_models
 from backend.agents.dashboard_schema_generator import generate_dashboard_schema
+from backend.utils.llm_client import generate_dataset_summary, generate_dashboard_summary
 
 app = FastAPI()
 
@@ -95,6 +96,11 @@ async def upload(file: UploadFile = File(...)):
     # Add categorical information to analysis
     from backend.utils.categorical_encoder import get_categorical_info
     analysis["categorical_info"] = get_categorical_info(df)
+
+    ai_summary = generate_dataset_summary(analysis, df.head(3).to_dict(orient="records"))
+    if ai_summary:
+        analysis["ai_summary"] = ai_summary
+        analysis["ai_summary_source"] = "llm"
     
     # Convert analysis dict to JSON-serializable format (handle NaN/inf)
     def make_serializable(obj):
@@ -606,6 +612,11 @@ async def generate_dashboard(id: str = Form(...)):
             results=results,
             trainer=trainer,
         )
+        ai_summary = generate_dashboard_summary(target, results, generated)
+        if ai_summary:
+            generated["ai_summary"] = ai_summary
+            generated["ai_summary_source"] = "llm"
+
         model_data["dashboard_schema"] = generated
         model_data["dashboard_schema_error"] = None
 

@@ -136,6 +136,13 @@ function renderAnalysis(analysis) {
     html.push('</div>');
     
     html.push('<h2 class="page-section-title">Dataset Overview</h2>');
+
+    if (analysis.ai_summary) {
+        html.push('<div class="card section-spaced">');
+        html.push('<div class="stat-label">AI Summary</div>');
+        html.push(`<p class="hero-subtitle">${escapeHtml(analysis.ai_summary)}</p>`);
+        html.push('</div>');
+    }
     
     html.push('<div class="content-grid">');
     html.push(`<div class="stat-card"><div class="stat-label">Rows</div><div class="stat-value">${analysis.rows}</div></div>`);

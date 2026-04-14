@@ -40,6 +40,24 @@ function _renderKpis(schema) {
     `).join('');
 }
 
+function _renderAiSummary(schema) {
+    const box = document.getElementById('dashboardAiSummary');
+    if (!box) return;
+
+    const summary = schema?.ai_summary;
+    if (!summary) {
+        box.style.display = 'none';
+        box.innerHTML = '';
+        return;
+    }
+
+    box.style.display = 'block';
+    box.innerHTML = `
+        <div class="quality-summary-title">AI Summary</div>
+        <div class="quality-summary-value">${escapeHtml(summary)}</div>
+    `;
+}
+
 function _classifyChart(chart) {
     const text = `${chart?.title || ''} ${chart?.x_title || ''} ${chart?.y_title || ''}`.toLowerCase();
 
@@ -306,6 +324,7 @@ function _renderView() {
 
     _setNavActive(currentView);
     _renderKpis(currentSchema);
+    _renderAiSummary(currentSchema);
     _renderQualityNumericSummary(currentSchema);
     _renderCharts(currentSchema);
 

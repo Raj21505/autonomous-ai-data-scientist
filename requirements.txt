@@ -12,3 +12,4 @@ openpyxl
 xgboost
 joblib
 imbalanced-learn
+python-dotenv
